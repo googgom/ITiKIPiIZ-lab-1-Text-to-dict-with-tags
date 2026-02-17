@@ -33,17 +33,20 @@ def getLList( L ):
     __null_keys = 0
     __rewrites = 0
     data: dict[str, str] = {}
+    basic: dict[str, str] = {}
 
     for word in L: # список лемм
         texts = []
         cur_key = None
+        base = word[0][0]['t']
         for forms in word: # список слов\форм?
             texts.append(forms['t'])
+            basic[forms['t']] = base
             for c in forms: # список ?
                 cur_val = c.attrib['v']
                 if cur_val.isupper() == True:
                     cur_key = cur_val
-        
+
         for text in texts:
             if cur_key == None:
                 __null_keys += 1
@@ -57,7 +60,9 @@ def getLList( L ):
         print("Неопределённых частей речи в словаре:", __null_keys)
         print("Повторных заполнений в словаре:", __repeats_cnt)
         print("Конфликтных определений в словаре:", __rewrites)
-        return data
+        return data, basic
+# Не решены внутренние копии
+
 
 
 
