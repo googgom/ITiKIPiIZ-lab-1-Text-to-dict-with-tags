@@ -10,7 +10,7 @@ text = rules.rule1(text) # Убирает спецсимволы
 new_text = ""
 sentences = text.split('\n')
 
-data, basic = parser.unitedParser("dict.opcorpora.xml")
+data, basic = parser.fastParser("dict.opcorpora.xml")
 
 '''
 print("MILE:1")

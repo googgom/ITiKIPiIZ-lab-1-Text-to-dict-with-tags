@@ -1,6 +1,10 @@
 import xml.etree.ElementTree as xp
 import rules
+import pickle
 import os
+
+CACHE_FILE = "vocabulary-cache.pkl"
+
 
 #tree = xp.parse('dict.opcorpora.xml')
 #root = tree.getroot()
@@ -129,3 +133,23 @@ def unitedParser( filepath ):
     print("Повторных заполнений в словаре:", __repeats_cnt)
     print("Конфликтных определений в словаре:", __rewrites)
     return data, basic
+
+
+
+# Для ускорения работы можно записать результат парсера в бинарный файл
+def fastParser( filepath ):
+    if os.path.exists(CACHE_FILE):
+        print("fastParser:Загрузка Кэша")
+        with open(CACHE_FILE, 'rb') as f:
+            return pickle.load(f)
+    else:
+        print("fastParser:Кэш не найден, первый запуск будет дольше")
+
+        data, basic = unitedParser(filepath)
+
+        print("fastParser:Сохранение Кэша")
+        with open(CACHE_FILE, 'wb') as f:
+            pickle.dump((data, basic), f, protocol=pickle.HIGHEST_PROTOCOL)
+        return data, basic
+    print("fastParser:Каким то образом механизм проверки Кэша был проигнорирован")
+    return unitedParser(filepath)
