@@ -10,11 +10,15 @@ text = rules.rule1(text) # Убирает спецсимволы
 new_text = ""
 sentences = text.split('\n')
 
+data, basic = parser.unitedParser("dict.opcorpora.xml")
+
+'''
 print("MILE:1")
 L, G = parser.extractor("dict.opcorpora.xml")
 print("MILE:2")
 data, basic = parser.getLList(L)
 print("MILE:3")
+'''
 for sentence in sentences:
     words = sentence.split(' ')
     new_sentence = ""
