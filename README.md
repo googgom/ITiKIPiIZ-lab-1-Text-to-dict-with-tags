@@ -7,6 +7,7 @@
 
 # Для запуска используется:
 ```
-cd src
+git clone https://github.com/googgom/ITiKIPiIZ-lab-1-Text-to-dict-with-tags.git
+cd ITiKIPiIZ-lab-1-Text-to-dict-with-tags.git/src
 ./qup --help
 ```
