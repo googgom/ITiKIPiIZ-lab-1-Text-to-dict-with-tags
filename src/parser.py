@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as xp
 import rules
+import os
 
 #tree = xp.parse('dict.opcorpora.xml')
 #root = tree.getroot()
@@ -7,8 +8,21 @@ import rules
 
 # Основная задача получить из .xml lemmata и grammemes
 def extractor( filepath ):
+    
     print("EILE:1")
-    tree = xp.parse(filepath)
+    if os.path.exists(filepath):
+        tree = xp.parse(filepath)
+    else:
+        print(f"Vocabulary {filepath} not found... Downloading from net...")
+        os.system("./download-vocabulary.sh")
+        tree = xp.parse(filepath)
+    '''
+    print("EILE:1")
+    try:
+        tree = xp.parse(filepath)
+    except FileNotFoundError:
+        print(f"Vocabulary {filepath} not found... Downloading from net...")
+    '''
     root = tree.getroot()
     L = None
     G = None
