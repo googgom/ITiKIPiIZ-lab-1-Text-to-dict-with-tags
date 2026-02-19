@@ -19,7 +19,6 @@ def unitedParser( filepath ):
     # !erus - альтернативная форма записи части речи
     # ShortEditRus, LongEditRus
 
-    print("UnitedParserStep:1")
     if not os.path.exists(filepath):
         print(f"Vocabulary {filepath} not found... Downloading from net...")
         os.system("./download-vocabulary.sh")
