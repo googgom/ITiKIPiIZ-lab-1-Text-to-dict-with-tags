@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as xp
+import rules
 
 #tree = xp.parse('dict.opcorpora.xml')
 #root = tree.getroot()
@@ -6,6 +7,7 @@ import xml.etree.ElementTree as xp
 
 # Основная задача получить из .xml lemmata и grammemes
 def extractor( filepath ):
+    print("EILE:1")
     tree = xp.parse(filepath)
     root = tree.getroot()
     L = None
@@ -22,7 +24,7 @@ def extractor( filepath ):
     else:
         return L, G
 
-L, G = extractor('dict.opcorpora.xml')
+#L, G = extractor('dict.opcorpora.xml')
 
 
 # Только сопоставление с [BIGL] большебуквенными формами, но с под-формами
@@ -35,32 +37,35 @@ def getLList( L ):
     data: dict[str, str] = {}
     basic: dict[str, str] = {}
 
-    for word in L: # список лемм
+    for word in L:
+        # список лемм
         texts = []
-        cur_key = None
-        base = word[0][0]['t']
-        for forms in word: # список слов\форм?
-            texts.append(forms['t'])
-            basic[forms['t']] = base
-            for c in forms: # список ?
+        cur_key = ""
+        base = word[0].attrib['t']
+        for forms in word:
+            # список слов\форм?
+            texts.append(rules.noyo(forms.attrib['t'])) # Ё не нужны!
+            basic[forms.attrib['t']] = base
+            for c in forms:
+                # список ?
                 cur_val = c.attrib['v']
                 if cur_val.isupper() == True:
                     cur_key = cur_val
 
+        #print("LILE:2")
         for text in texts:
             if cur_key == None:
                 __null_keys += 1
-            elif cur_key == data[text]:
+            if text in data and cur_key == data[text]:
                 __repeats_cnt += 1
-            elif data[text] != None and cur_key != data[text]:
+            if text in data and cur_key != data[text]:
                 __rewrites += 1
-            else:
-                data[text] = cur_key
+            data[text] = cur_key
         
-        print("Неопределённых частей речи в словаре:", __null_keys)
-        print("Повторных заполнений в словаре:", __repeats_cnt)
-        print("Конфликтных определений в словаре:", __rewrites)
-        return data, basic
+    print("Неопределённых частей речи в словаре:", __null_keys)
+    print("Повторных заполнений в словаре:", __repeats_cnt)
+    print("Конфликтных определений в словаре:", __rewrites)
+    return data, basic
 # Не решены внутренние копии
 
 
@@ -70,9 +75,11 @@ def getLList( L ):
 # Ёж: NOUN,habib; NOUN,ibrab;
 # В том числе для форм(l->f)
 # Позволит решать противоречия(потом?)
+'''
 def _exper_getLList( L ):
     data: dict[str, list[str]] = {}
 
     for la in L: # список лемм
         for wf in la: # список слов\форм?
             for c in wf: # список ?
+'''
