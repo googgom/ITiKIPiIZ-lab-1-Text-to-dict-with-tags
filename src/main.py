@@ -40,6 +40,9 @@ sentences = text.split('\n')
 
 data, basic, serus, lerus = parser.fastParser("dict.opcorpora.xml")
 
+cnt_checked = 0
+cnt_solved  = 0
+
 for sentence in sentences:
     words = sentence.split(' ')
     new_sentence = ""
@@ -50,7 +53,15 @@ for sentence in sentences:
             value = lerus.get(value, "?")
         elif OUTPUT_MODE == "S":
             value = serus.get(value, "?")
+
+        cnt_checked += 1
+        if basic.get(new_word, "нераспознано") is not "нераспознано":
+            cnt_solved += 1
+
         new_sentence += word + '{' + basic.get(new_word, "нераспознано") + '=' + value + '}' + ' '
     new_text += new_sentence + '\n'
 
 print(new_text)
+
+ratio = cnt_solved / cnt_checked
+print(f"Accuracy is {ratio * 100}%")
