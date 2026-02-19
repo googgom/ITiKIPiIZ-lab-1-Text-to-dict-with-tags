@@ -1,4 +1,5 @@
 ITiKIPiIZ-lab-1.code-workspace
 *.xml
+*.pkl
 план
 src/__pycache__
