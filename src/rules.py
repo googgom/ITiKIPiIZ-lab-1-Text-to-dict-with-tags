@@ -1,4 +1,4 @@
-removal_list = ( ',', "'", '"', '.', '!', '?' )
+removal_list = ( ',', "'", '"', '.', '!', '?', ':' )
 
 def rule1( text ):
     for remov in removal_list:
@@ -8,7 +8,3 @@ def rule1( text ):
 def noyo( text ):
     newtext = text.replace('ё', 'е')
     return newtext
-
-# перевод типа слова на русский, если он есть
-def optional1( text, flag ):
-    print("Not supported")
