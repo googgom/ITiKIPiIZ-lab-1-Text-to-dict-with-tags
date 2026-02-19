@@ -95,6 +95,10 @@ def unitedParser( filepath ):
     __rewrites = 0
     data: dict[str, str] = {}
     basic: dict[str, str] = {}
+    serus: dict[str, str] = {}
+    lerus: dict[str, str] = {}
+    # !erus - альтернативная форма записи части речи
+    # ShortEditRus, LongEditRus
 
     print("UnitedParserStep:1")
     if not os.path.exists(filepath):
@@ -104,7 +108,10 @@ def unitedParser( filepath ):
     context = xp.iterparse(filepath, events=('end',))
 
     for __e_t, word in context:
-        if word.tag == "lemma":
+        if word.tag == "grammeme":
+            serus[word[0].text] = word[1].text
+            lerus[word[0].text] = word[2].text
+        elif word.tag == "lemma":
             texts = []
             cur_key = None
             base = word[0].attrib['t']
@@ -132,7 +139,7 @@ def unitedParser( filepath ):
     print("Неопределённых частей речи в словаре:", __null_keys)
     print("Повторных заполнений в словаре:", __repeats_cnt)
     print("Конфликтных определений в словаре:", __rewrites)
-    return data, basic
+    return data, basic, serus, lerus
 
 
 
@@ -145,11 +152,11 @@ def fastParser( filepath ):
     else:
         print("fastParser:Кэш не найден, первый запуск будет дольше")
 
-        data, basic = unitedParser(filepath)
+        data, basic, serus, lerus = unitedParser(filepath)
 
         print("fastParser:Сохранение Кэша")
         with open(CACHE_FILE, 'wb') as f:
-            pickle.dump((data, basic), f, protocol=pickle.HIGHEST_PROTOCOL)
-        return data, basic
+            pickle.dump((data, basic, serus, lerus), f, protocol=pickle.HIGHEST_PROTOCOL)
+        return data, basic, serus, lerus
     print("fastParser:Каким то образом механизм проверки Кэша был проигнорирован")
     return unitedParser(filepath)
